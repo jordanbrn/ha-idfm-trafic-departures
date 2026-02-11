@@ -1,0 +1,10 @@
+# HACS (Home Assistant Community Store) Integration
+
+domain: idfm_trafic
+name: IDFM Trafic
+documentation: https://github.com/jordanetinault/ha-idfm-trafic
+codeowners:
+  - "@jordanetinault"
+country:
+  - FR
+render_readme: true

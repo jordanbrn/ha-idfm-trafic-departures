@@ -1,0 +1,48 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "IDFM Traffic Configuration",
+        "description": "Configure your IDFM Traffic integration",
+        "data": {
+          "api_key": "IDFM API Key"
+        }
+      },
+      "select_lines": {
+        "title": "Line Selection",
+        "description": "Choose lines to monitor",
+        "data": {
+          "lines": "Lines"
+        }
+      },
+      "select_stations": {
+        "title": "Station Selection",
+        "description": "Add stations for departures",
+        "data": {
+          "stations_input": "Station IDs (comma-separated)"
+        }
+      }
+    },
+    "error": {
+      "invalid_api_key": "Invalid API key",
+      "cannot_connect": "Cannot connect to IDFM API"
+    },
+    "abort": {
+      "already_configured": "This integration is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "IDFM Traffic Options",
+        "description": "Modify integration options",
+        "data": {
+          "lines": "Lines to monitor",
+          "stations_input": "Station IDs (comma-separated)",
+          "traffic_enabled": "Enable traffic info",
+          "departures_enabled": "Enable next departures"
+        }
+      }
+    }
+  }
+}

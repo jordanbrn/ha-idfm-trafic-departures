@@ -1,0 +1,48 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration IDFM Trafic",
+        "description": "Configurez votre intégration IDFM Trafic",
+        "data": {
+          "api_key": "Clé API IDFM"
+        }
+      },
+      "select_lines": {
+        "title": "Sélection des lignes",
+        "description": "Choisissez les lignes à surveiller",
+        "data": {
+          "lines": "Lignes"
+        }
+      },
+      "select_stations": {
+        "title": "Sélection des stations",
+        "description": "Ajoutez les stations pour les départs",
+        "data": {
+          "stations_input": "IDs des stations (séparés par des virgules)"
+        }
+      }
+    },
+    "error": {
+      "invalid_api_key": "Clé API invalide",
+      "cannot_connect": "Impossible de se connecter à l'API IDFM"
+    },
+    "abort": {
+      "already_configured": "Cette intégration est déjà configurée"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options IDFM Trafic",
+        "description": "Modifiez les options de l'intégration",
+        "data": {
+          "lines": "Lignes à surveiller",
+          "stations_input": "IDs des stations (séparés par des virgules)",
+          "traffic_enabled": "Activer les infos trafic",
+          "departures_enabled": "Activer les prochains départs"
+        }
+      }
+    }
+  }
+}

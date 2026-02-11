@@ -53,6 +53,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 ## Testing
 
 Before submitting a PR:
+
 1. Test the integration in a real Home Assistant instance
 2. Verify all sensors update correctly
 3. Check for errors in Home Assistant logs

@@ -67,26 +67,28 @@ curl -H "apiKey: VOTRE_CLE_API" \
 
 ### Méthode 2 : Stations principales
 
-| Station | ID |
-|---------|-----|
+| Station               | ID                     |
+| --------------------- | ---------------------- |
 | Châtelet - Les Halles | `stop_area:IDFM:71570` |
-| Gare du Nord | `stop_area:IDFM:71249` |
-| Gare de Lyon | `stop_area:IDFM:71505` |
-| Saint-Lazare | `stop_area:IDFM:71364` |
-| La Défense | `stop_area:IDFM:71386` |
-| Nation | `stop_area:IDFM:71934` |
-| République | `stop_area:IDFM:71522` |
-| Montparnasse | `stop_area:IDFM:71349` |
+| Gare du Nord          | `stop_area:IDFM:71249` |
+| Gare de Lyon          | `stop_area:IDFM:71505` |
+| Saint-Lazare          | `stop_area:IDFM:71364` |
+| La Défense            | `stop_area:IDFM:71386` |
+| Nation                | `stop_area:IDFM:71934` |
+| République            | `stop_area:IDFM:71522` |
+| Montparnasse          | `stop_area:IDFM:71349` |
 
 ## 📊 Utilisation
 
 ### Sensors créés
 
 **Pour chaque ligne :**
+
 - `sensor.rer_a_trafic` : État du trafic (normal / perturbation / information)
 - Attributs : `severity`, `messages`, `line_color`, `updated_at`
 
 **Pour chaque station :**
+
 - `sensor.chatelet_departs` : Nombre de prochains départs
 - Attributs : `departures`, `next_departure`, `departure_1` à `departure_5`
 
@@ -104,6 +106,7 @@ entities:
   - entity: sensor.metro_1_trafic
   - entity: sensor.metro_9_trafic
 ```
+
 </details>
 
 <details>
@@ -120,6 +123,7 @@ content: |
   {% endif %}
   {% endfor %}
 ```
+
 </details>
 
 <details>
@@ -134,13 +138,14 @@ card:
   type: markdown
   content: |
     ## 🚨 Alerte Trafic RER A
-    
+
     {% for msg in state_attr('sensor.rer_a_trafic', 'messages') %}
     **{{ msg.title }}**
     {{ msg.message }}
     ---
     {% endfor %}
 ```
+
 </details>
 
 Plus d'exemples dans le [fichier examples.py](custom_components/idfm_trafic/examples.py)
@@ -164,6 +169,7 @@ automation:
           message: >
             {{ state_attr('sensor.rer_a_trafic', 'messages')[0].message }}
 ```
+
 </details>
 
 ## 🔍 IDs des lignes
@@ -226,7 +232,7 @@ logger:
 
 ## 🤝 Contribution
 
-Les contributions sont les bienvenues ! 
+Les contributions sont les bienvenues !
 
 1. Forkez le projet
 2. Créez votre branche (`git checkout -b feature/amazing-feature`)

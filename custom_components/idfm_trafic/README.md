@@ -55,6 +55,7 @@ Utilise l'API officielle [PRIM (Île-de-France Mobilités)](https://prim.iledefr
 Les IDs de stations suivent le format : `stop_area:IDFM:XXXXX`
 
 **Méthode 1 : Via l'API**
+
 ```bash
 curl -H "apiKey: VOTRE_CLE" \
   "https://prim.iledefrance-mobilites.fr/marketplace/v2/navitia/coverage/fr-idf/places?q=Chatelet&type[]=stop_area"
@@ -62,27 +63,30 @@ curl -H "apiKey: VOTRE_CLE" \
 
 **Méthode 2 : Exemples de stations principales**
 
-| Station | ID |
-|---------|-----|
+| Station               | ID                     |
+| --------------------- | ---------------------- |
 | Châtelet - Les Halles | `stop_area:IDFM:71570` |
-| Gare du Nord | `stop_area:IDFM:71249` |
-| Gare de Lyon | `stop_area:IDFM:71505` |
-| Saint-Lazare | `stop_area:IDFM:71364` |
-| La Défense | `stop_area:IDFM:71386` |
+| Gare du Nord          | `stop_area:IDFM:71249` |
+| Gare de Lyon          | `stop_area:IDFM:71505` |
+| Saint-Lazare          | `stop_area:IDFM:71364` |
+| La Défense            | `stop_area:IDFM:71386` |
 
 ## 📊 Utilisation
 
 ### Sensors créés
 
 Pour chaque **ligne** sélectionnée :
+
 - `sensor.rer_a_trafic` : État du trafic (normal / perturbation / information)
 
 Pour chaque **station** configurée :
+
 - `sensor.chatelet_departs` : Nombre de prochains départs
 
 ### Attributs disponibles
 
 **Sensor de trafic :**
+
 ```yaml
 line_id: "line:IDFM:C01742"
 line_name: "RER A"
@@ -97,6 +101,7 @@ updated_at: "2026-02-11T14:30:00"
 ```
 
 **Sensor de départs :**
+
 ```yaml
 station_id: "stop_area:IDFM:71570"
 station_name: "Châtelet"
@@ -137,9 +142,9 @@ entities:
 type: markdown
 content: |
   ## 🚇 Trafic RER A
-  
+
   **État:** {{ states('sensor.rer_a_trafic') | upper }}
-  
+
   {% if state_attr('sensor.rer_a_trafic', 'messages') %}
   ### ⚠️ Perturbations
   {% for msg in state_attr('sensor.rer_a_trafic', 'messages') %}
@@ -157,7 +162,7 @@ content: |
 type: markdown
 content: |
   ## 🚉 Prochains départs - Châtelet
-  
+
   {% for i in range(1, 6) %}
   {% set dep = 'departure_' ~ i %}
   {% if state_attr('sensor.chatelet_departs', dep) %}
@@ -179,7 +184,7 @@ card:
   type: markdown
   content: |
     ## 🚨 Alerte Trafic RER A
-    
+
     {% for msg in state_attr('sensor.rer_a_trafic', 'messages') %}
     **{{ msg.title }}**
     {{ msg.message }}
@@ -249,6 +254,7 @@ automation:
 ## 🔍 IDs des lignes
 
 ### Métros
+
 - Métro 1 : `line:IDFM:C01371`
 - Métro 2 : `line:IDFM:C01372`
 - Métro 3 : `line:IDFM:C01373`
@@ -265,6 +271,7 @@ automation:
 - Métro 14 : `line:IDFM:C01384`
 
 ### RER
+
 - RER A : `line:IDFM:C01742`
 - RER B : `line:IDFM:C01743`
 - RER C : `line:IDFM:C01727`
@@ -272,6 +279,7 @@ automation:
 - RER E : `line:IDFM:C01729`
 
 ### Tramways
+
 - Tramway T1 : `line:IDFM:C01389`
 - Tramway T2 : `line:IDFM:C01390`
 - Tramway T3a : `line:IDFM:C01391`
@@ -286,11 +294,11 @@ Si vous préférez la configuration YAML :
 idfm_trafic:
   api_key: "7cx7PoingnrOU3gS0ZxQ7BqCCTcgg7bL"
   lines:
-    - line:IDFM:C01742  # RER A
-    - line:IDFM:C01729  # RER E
-    - line:IDFM:C01371  # Métro 1
+    - line:IDFM:C01742 # RER A
+    - line:IDFM:C01729 # RER E
+    - line:IDFM:C01371 # Métro 1
   stations:
-    - stop_area:IDFM:71570  # Châtelet
+    - stop_area:IDFM:71570 # Châtelet
 ```
 
 ## 🐛 Dépannage
@@ -320,6 +328,7 @@ logger:
 ## 🤝 Contribution
 
 Les contributions sont les bienvenues ! N'hésitez pas à :
+
 - Signaler des bugs
 - Proposer des améliorations
 - Ajouter des lignes manquantes

@@ -103,16 +103,42 @@ class IDFMLineTrafficSensor(CoordinatorEntity, SensorEntity):
         return "mdi:train"
 
     @property
+    def icon_color(self) -> str:
+        """Couleur de l'icône selon la sévérité."""
+        if self._traffic_data:
+            severity = self._traffic_data.get("severity", "information")
+            if severity == "blocking":
+                return "#FF0000"  # Rouge
+            elif severity == "perturbation":
+                return "#FF8C00"  # Orange
+            elif severity == "information":
+                return "#FFA500"  # Orange clair
+        return "#00FF00"  # Vert (normal)
+
+    @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Attributs supplémentaires."""
         if not self._traffic_data:
             return {}
         
+        severity = self._traffic_data.get("severity", "information")
+        
+        # Déterminer la couleur selon la sévérité
+        if severity == "blocking":
+            status_color = "#FF0000"  # Rouge
+        elif severity == "perturbation":
+            status_color = "#FF8C00"  # Orange
+        elif severity == "information":
+            status_color = "#FFA500"  # Orange clair
+        else:
+            status_color = "#00FF00"  # Vert (normal)
+        
         return {
             "line_id": self._line_id,
             "line_name": self._line_name,
             "line_color": self._line_color,
-            "severity": self._traffic_data.get("severity", "information"),
+            "severity": severity,
+            "status_color": status_color,
             "messages": self._traffic_data.get("messages", []),
             "updated_at": self._traffic_data.get("updated_at"),
             "message_count": len(self._traffic_data.get("messages", [])),

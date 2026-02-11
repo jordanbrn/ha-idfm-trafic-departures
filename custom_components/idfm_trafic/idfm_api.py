@@ -79,7 +79,7 @@ class IDFMApiClient:
         Returns:
             Prochains départs de la station
         """
-        endpoint = f"departures/{stop_area_id}?count={count}"
+        endpoint = f"stop_areas/{stop_area_id}/departures"
         return await self._request(endpoint)
 
     async def async_get_station_traffic(self, stop_area_id: str) -> dict[str, Any] | None:
@@ -169,6 +169,14 @@ class IDFMTrafficParser:
             # Vérifier que la perturbation est active
             status = disruption.get("status")
             if status != "active":
+                continue
+            
+            # Filtrer les perturbations d'équipements (ascenseurs, escalators, etc.)
+            tags = disruption.get("tags", [])
+            is_equipment = any(tag in ["Ascenseur", "Escalator", "Escalier mécanique", "Escalier"] for tag in tags)
+            
+            if is_equipment:
+                _LOGGER.debug("Filtering out equipment disruption: %s", tags)
                 continue
             
             # Récupérer la sévérité
@@ -284,11 +292,12 @@ class IDFMTrafficParser:
                 "line": display_info.get("label", ""),
                 "line_code": display_info.get("code", ""),
                 "direction": display_info.get("direction", ""),
-                "departure_time": departure_dt,
+                "departure_time": departure_dt.isoformat(),
+                "departure_timestamp": departure_dt.timestamp(),  # Pour le tri
                 "time_remaining": time_remaining,
                 "platform": stop_date_time.get("departure_platform", ""),
                 "headsign": display_info.get("headsign", ""),
                 "network": display_info.get("network", ""),
             })
 
-        return sorted(departures, key=lambda x: x["departure_time"])
+        return sorted(departures, key=lambda x: x["departure_timestamp"])

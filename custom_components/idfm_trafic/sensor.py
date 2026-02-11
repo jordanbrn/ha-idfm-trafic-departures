@@ -118,11 +118,25 @@ class IDFMLineTrafficSensor(CoordinatorEntity, SensorEntity):
             "message_count": len(self._traffic_data.get("messages", [])),
         }
 
+    async def async_added_to_hass(self) -> None:
+        """Quand l'entité est ajoutée à Home Assistant."""
+        await super().async_added_to_hass()
+        # Forcer une première mise à jour
+        await self._async_update_data()
+
     async def async_update(self) -> None:
-        """Mise à jour des données."""
-        data = await self._client.async_get_line_traffic(self._line_id)
-        if data:
-            self._traffic_data = IDFMTrafficParser.parse_line_reports(data)
+        """Mise à jour via le coordinateur."""
+        await self._async_update_data()
+
+    async def _async_update_data(self) -> None:
+        """Récupérer les données de l'API."""
+        try:
+            data = await self._client.async_get_line_traffic(self._line_id)
+            if data:
+                self._traffic_data = IDFMTrafficParser.parse_line_reports(data)
+                _LOGGER.debug("Traffic data updated for %s: %s", self._line_name, self._traffic_data.get("status"))
+        except Exception as e:
+            _LOGGER.error("Error updating traffic for %s: %s", self._line_name, e)
 
 
 class IDFMStationDeparturesSensor(CoordinatorEntity, SensorEntity):
@@ -189,11 +203,25 @@ class IDFMStationDeparturesSensor(CoordinatorEntity, SensorEntity):
         
         return attributes
 
+    async def async_added_to_hass(self) -> None:
+        """Quand l'entité est ajoutée à Home Assistant."""
+        await super().async_added_to_hass()
+        # Forcer une première mise à jour
+        await self._async_update_data()
+
     async def async_update(self) -> None:
-        """Mise à jour des données."""
-        data = await self._client.async_get_station_departures(self._station_id, count=10)
-        if data:
-            self._departures = IDFMTrafficParser.parse_departures(data)
+        """Mise à jour via le coordinateur."""
+        await self._async_update_data()
+
+    async def _async_update_data(self) -> None:
+        """Récupérer les données de l'API."""
+        try:
+            data = await self._client.async_get_station_departures(self._station_id, count=10)
+            if data:
+                self._departures = IDFMTrafficParser.parse_departures(data)
+                _LOGGER.debug("Departures updated for %s: %d trains", self._station_name, len(self._departures))
+        except Exception as e:
+            _LOGGER.error("Error updating departures for %s: %s", self._station_name, e)
 
 
 class IDFMStationTrafficSensor(CoordinatorEntity, SensorEntity):

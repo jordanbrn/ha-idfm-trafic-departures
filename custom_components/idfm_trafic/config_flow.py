@@ -143,7 +143,25 @@ class IDFMTraficOptionsFlow(config_entries.OptionsFlow):
     ) -> FlowResult:
         """Gestion des options."""
         if user_input is not None:
-            return self.async_create_entry(title="", data=user_input)
+            # Parser les stations
+            stations_input = user_input.get("stations_input", "")
+            if stations_input:
+                stations = [s.strip() for s in stations_input.split(",") if s.strip()]
+            else:
+                stations = []
+            
+            # Mettre à jour entry.data
+            self.hass.config_entries.async_update_entry(
+                self.config_entry,
+                data={
+                    **self.config_entry.data,
+                    CONF_LINES: user_input.get(CONF_LINES, []),
+                    CONF_STATIONS: stations,
+                    "traffic_enabled": user_input.get("traffic_enabled", True),
+                    "departures_enabled": user_input.get("departures_enabled", True),
+                },
+            )
+            return self.async_create_entry(title="", data={})
 
         # Options actuelles
         current_lines = self.config_entry.data.get(CONF_LINES, [])

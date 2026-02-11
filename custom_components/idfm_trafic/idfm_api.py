@@ -143,7 +143,7 @@ class IDFMTrafficParser:
                 "updated_at": datetime
             }
         """
-        if not data or "line_reports" not in data:
+        if not data:
             return {
                 "status": "unknown",
                 "severity": "information",
@@ -151,43 +151,76 @@ class IDFMTrafficParser:
                 "updated_at": datetime.now(),
             }
 
-        line_reports = data.get("line_reports", [])
+        # Analyser les perturbations depuis disruptions[]
+        messages = []
+        max_severity = "information"
+        disruptions = data.get("disruptions", [])
         
-        if not line_reports:
+        if not disruptions:
             return {
                 "status": "normal",
                 "severity": "information",
                 "messages": [],
                 "updated_at": datetime.now(),
             }
-
-        # Analyser les perturbations
-        messages = []
-        max_severity = "information"
         
-        for report in line_reports:
-            pt_objects = report.get("pt_objects", [])
+        for disruption in disruptions:
+            # Vérifier que la perturbation est active
+            status = disruption.get("status")
+            if status != "active":
+                continue
             
-            for pt_obj in pt_objects:
-                line_reports_list = pt_obj.get("line_reports", [])
+            # Récupérer la sévérité
+            severity_obj = disruption.get("severity", {})
+            severity_name = severity_obj.get("name", "information")
+            severity_effect = severity_obj.get("effect", "")
+            
+            # Mapper les sévérités
+            if severity_effect in ["NO_SERVICE", "REDUCED_SERVICE", "SIGNIFICANT_DELAYS"]:
+                severity = "blocking"
+            elif severity_effect in ["DETOUR", "MODIFIED_SERVICE", "OTHER_EFFECT"]:
+                severity = "perturbation"
+            else:
+                severity = "information"
+            
+            # Déterminer la sévérité maximale
+            if severity == "blocking":
+                max_severity = "blocking"
+            elif severity == "perturbation" and max_severity != "blocking":
+                max_severity = "perturbation"
+            
+            # Extraire les messages
+            disruption_messages = disruption.get("messages", [])
+            title = ""
+            message_text = ""
+            
+            for msg in disruption_messages:
+                channel = msg.get("channel", {})
+                channel_name = channel.get("name", "")
+                text = msg.get("text", "")
                 
-                for line_report in line_reports_list:
-                    severity = line_report.get("severity", {}).get("name", "information")
-                    
-                    # Déterminer la sévérité maximale
-                    if severity == "blocking":
-                        max_severity = "blocking"
-                    elif severity == "perturbation" and max_severity != "blocking":
-                        max_severity = "perturbation"
-                    
-                    # Extraire les messages
-                    message_obj = line_report.get("message", {})
-                    if message_obj:
-                        messages.append({
-                            "title": message_obj.get("title", ""),
-                            "message": message_obj.get("text", ""),
-                            "severity": severity,
-                        })
+                # Priorité: titre pour le titre, moteur/email pour le message détaillé
+                if channel_name == "titre" and not title:
+                    title = text
+                elif channel_name in ["moteur", "email"] and not message_text:
+                    # Nettoyer le HTML
+                    import re
+                    clean_text = re.sub('<[^<]+?>', '', text)
+                    clean_text = clean_text.replace('&#232;', 'è').replace('&#233;', 'é')
+                    clean_text = clean_text.replace('&#224;', 'à').replace('&nbsp;', ' ')
+                    message_text = clean_text.strip()
+                elif channel_name == "notification" and not title:
+                    title = text
+            
+            if title or message_text:
+                messages.append({
+                    "title": title or "Perturbation",
+                    "message": message_text or title,
+                    "severity": severity,
+                    "category": disruption.get("category", ""),
+                    "cause": disruption.get("cause", ""),
+                    "updated_at": disruption.get("updated_at", ""),
+                })
 
         # Déterminer le statut global
         if max_severity == "blocking":

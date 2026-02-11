@@ -22,7 +22,7 @@ Utilise l'API officielle [PRIM (Île-de-France Mobilités)](https://prim.iledefr
 2. Cliquez sur "Integrations"
 3. Cliquez sur le menu ⋮ en haut à droite
 4. Sélectionnez "Custom repositories"
-5. Ajoutez l'URL : `https://github.com/jordanetinault/ha-idfm-trafic`
+5. Ajoutez l'URL : `https://github.com/jordanbrn/ha-idfm-trafic-departures`
 6. Catégorie : `Integration`
 7. Cliquez sur "Add"
 8. Recherchez "IDFM Trafic" et installez

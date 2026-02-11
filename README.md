@@ -1,8 +1,8 @@
 # IDFM Trafic - Home Assistant Integration
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
-[![GitHub Release](https://img.shields.io/github/release/jordanetinault/ha-idfm-trafic.svg)](https://github.com/jordanetinault/ha-idfm-trafic/releases)
-[![License](https://img.shields.io/github/license/jordanetinault/ha-idfm-trafic.svg)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/release/jordanbrn/ha-idfm-trafic-departures.svg)](https://github.com/jordanbrn/ha-idfm-trafic-departures/releases)
+[![License](https://img.shields.io/github/license/jordanbrn/ha-idfm-trafic-departures.svg)](LICENSE)
 
 Intégration Home Assistant pour les **infos trafic** et **prochains départs** des transports en commun d'Île-de-France (Métro, RER, Train, Tramway).
 
@@ -27,7 +27,7 @@ Utilise l'API officielle [PRIM (Île-de-France Mobilités)](https://prim.iledefr
 2. Cliquez sur **Integrations**
 3. Cliquez sur le menu **⋮** en haut à droite
 4. Sélectionnez **Custom repositories**
-5. Ajoutez l'URL : `https://github.com/jordanetinault/ha-idfm-trafic`
+5. Ajoutez l'URL : `https://github.com/jordanbrn/ha-idfm-trafic-departures`
 6. Catégorie : **Integration**
 7. Cliquez sur **Add**
 8. Recherchez **"IDFM Trafic"** et installez
@@ -35,7 +35,7 @@ Utilise l'API officielle [PRIM (Île-de-France Mobilités)](https://prim.iledefr
 
 ### Installation manuelle
 
-1. Téléchargez la dernière version depuis [Releases](https://github.com/jordanetinault/ha-idfm-trafic/releases)
+1. Téléchargez la dernière version depuis [Releases](https://github.com/jordanbrn/ha-idfm-trafic-departures/releases)
 2. Copiez le dossier `custom_components/idfm_trafic` dans votre dossier `config/custom_components/`
 3. Redémarrez Home Assistant
 

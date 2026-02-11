@@ -7,26 +7,22 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
 
       - name: Create ZIP
         run: |
           cd custom_components/idfm_trafic
           zip -r ../../idfm_trafic.zip ./*
+          cd ../..
+          ls -lh idfm_trafic.zip
 
       - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v1
+        with:
+          files: idfm_trafic.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./idfm_trafic.zip
-          asset_name: idfm_trafic.zip
-          asset_content_type: application/zip
